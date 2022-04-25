@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<body>
+<center><br><br><br>
+Month:<select id=m onchange=setCal()>
+<option value=0>January</option>
+<option value=1>February</option>
+<option value=2>March</option>
+<option value=3>April</option>
+<option value=4>May</option>
+<option value=5>June</option>
+<option value=6>July</option>
+<option value=7>August</option>
+<option value=8>September</option>
+<option value=9>October</option>
+<option value=10>November</option>
+<option value=11>December</option>
+</select>
+Year:<input type=number length=4 id=y style="width: 40pt;" onchange=setCal() min=1800>
+<br><br>
+<table border=1 id=c>
+</table>
+<br><br><br>
+&copy; Sayantan Roy
+<br><br><br>
+</center>
+<style>
+html, body{
+    background: linear-gradient(135deg, #0F0FFF,#00007F,#00000F);
+    height: 100%;
+    color: white;
+}
+
+td,th{
+    height: 20pt;
+    width: 30pt;
+    text-align: center;
+    color: yellow;
+}
+
+.sun{
+    color: red;
+}
+
+.today{
+    background-color: darkgreen;
+    font-weight: bolder;
+}
+</style>
+<script>
+var dt = new Date()
+
+function setCal()
+{
+    var m=Number(document.getElementById("m").value)
+    var y=Number(document.getElementById("y").value)
+    if(y<1800)
+    {
+        y=(y%1000)+2000
+    document.getElementById("y").value=y
+    }
+    var d=new Date(y,m,1,0,0,0,0)
+    var s="<tr><th class=sun>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr><tr>"
+    var k=d.getDay()
+    for(var i=0;i<k;i++)
+        s=s+"<td></td>"
+    var md=31
+    if(m==1)
+    {
+        if(y%400==0)
+            md=29
+        else if(y%100!=0&&y%4==0)
+            md=29
+        else
+            md=28
+    }
+    else if(m==3||m==5||m==8||m==10)
+        md=30
+    for(var i=1;i<=md;i++)
+    {
+        if(i==dt.getDate()&&m==dt.getMonth()&&y==dt.getFullYear())
+        s=s+("<td class=today>"+i+"</td>")
+        else if((k+i)%7==1)
+        s=s+("<td class=sun>"+i+"</td>")
+        else
+        s=s+("<td>"+i+"</td>")
+        if((k==0&&i%7==0)||i%7==7-k)
+            s=s+"</tr><tr>"
+    }
+    if((md+k)%7>0)
+        for(i=(md+k)%7;i<7;i++)
+            s=s+"<td></td>"
+    s=s+"</tr>"
+    document.getElementById("c").innerHTML=s
+}
+
+window.onload=function()
+{
+    document.getElementById("m").value=dt.getMonth()
+    document.getElementById("y").value=dt.getFullYear()
+    setCal()
+}
+</script>
+</body>
+</html>
