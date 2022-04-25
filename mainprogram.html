@@ -1,0 +1,320 @@
+<html>
+<body bgcolor="grey" text="white">
+<center>
+<h2 id="a">0</h5>
+<input id="r" type="number">
+<br>
+<text>+</text>
+<input id="i" type="number">
+<text>i</text>
+<br>
+<h4>
+<table border=0><tr>
+<td><button onclick="setz()" style="width: 100; height: 25">set</button></td>
+<td><button onclick="clr1()" style="width: 100; height: 25">clear result</button></td>
+</tr><tr>
+<td><button onclick="cpy()" style="width: 100; height: 25">copy</button></td>
+<td><button onclick="clr2()" style="width: 100; height: 25">clear input</button></td>
+</tr></table>
+</h4>
+<h3>
+<table border=0><tr><td>
+<button onclick="add()" style="width: 47; height: 25">+</button>
+<button onclick="sub()" style="width: 47; height: 25">-</button></td><td>
+<button onclick="mul()" style="width: 47; height: 25">x</button>
+<button onclick="div()" style="width: 47; height: 25">/</button>
+</td></tr><tr><td>
+<button onclick="sqrz()" style="width: 100; height: 25">square</button></td><td>
+<button onclick="sqrtz()" style="width: 100; height: 25">square root</button>
+</td></tr><tr><td>
+<button onclick="rec()" style="width: 100; height: 25">reciprocal</sup></button></td><td>
+<button onclick="conj()" style="width: 100; height: 25">conjugate</button>
+</td></tr><tr><td>
+<button onclick="mod()" style="width: 47; height: 25">mod</button>
+<button onclick="arg()" style="width: 47; height: 25">arg</button></td><td>
+<button onclick="lg()" style="width: 47; height: 25">ln</button>
+<button onclick="e()" style="width: 47; height: 25">exp</button>
+</td></tr><tr><td>
+<button onclick="sinz()" style="width: 47; height: 25">sin</button>
+<button onclick="cosz()" style="width: 47; height: 25">cos</button></td><td>
+<button onclick="sinhz()" style="width: 47; height: 25">sinh</button>
+<button onclick="coshz()" style="width: 47; height: 25">cosh</button>
+</td></tr></table>
+</h3>
+<hr align="left" width="350px">
+&copy; Sayantan Roy
+</script>
+<script>
+var x=0.0;
+var y=0.0;
+var a=0.0;
+var b=0.0;
+function inp()
+{
+	x=Number(document.getElementById("r").value);
+	y=Number(document.getElementById("i").value);
+}
+function disp()
+{
+	var s="";
+   if((a.toString().length+b.toString().length)>10)
+   {
+      s=""+a+"<br>";
+      if(b>0)
+         s=s+"+";
+      if(b!=0)
+         s=s+b+"i";
+   }
+   else
+   {
+	if(a==0.0&&b==0.0)
+		s="0";
+	else if(a!=0.0)
+		s=""+a;
+	if(b<0.0)
+		s=s+b+"i";
+	else if(b>0.0)
+	{
+		if(a==0.0)
+			s=""+b+"i";
+		else
+			s=s+"+"+b+"i";
+	}
+   }
+	document.getElementById("a").innerHTML=s;
+}
+function setz()
+{
+	inp();
+	a=x;
+	b=y;
+	disp();
+}
+function clr1()
+{
+	a=0.0;
+	b=0.0;
+	disp();
+}
+function clr2()
+{
+	document.getElementById("r").value="";
+	document.getElementById("i").value="";
+}
+function cpy()
+{
+	document.getElementById("r").value=a;
+	document.getElementById("i").value=b;
+}
+function add()
+{
+	inp();
+	a=a+x;
+	b=b+y;
+	disp();
+}
+function sub()
+{
+	inp();
+	a=a-x;
+	b=b-y;
+	disp();
+}
+function mul()
+{
+	inp();
+	var m=a*x-b*y;
+	var n=b*x+a*y;
+	a=m;
+	b=n;
+	disp();
+}
+function div()
+{
+	inp();
+	if(x==0.0&&y==0.0)
+	{
+		errorz();
+		return;
+	}
+	var m=(a*x+b*y)/(x*x+y*y);
+	var n=(b*x-a*y)/(x*x+y*y);
+	a=m;
+	b=n;
+	disp();
+}
+function sqrz()
+{
+	inp();
+	a=x*x-y*y;
+	b=2*x*y;
+	disp();
+}
+function sqrtz()
+{
+	inp();
+	a=Math.sqrt((Math.sqrt(x*x+y*y)+x)/2);
+	b=Math.sqrt((Math.sqrt(x*x+y*y)-x)/2);
+	disp();
+}
+function rec()
+{
+	inp();
+	if(x==0.0&&y==0.0)
+	{
+		errorz();
+		return;
+	}
+	var m=x/(x*x+y*y);
+	var n=-y/(x*x+y*y);
+	a=m;
+	b=n;
+	disp();
+}
+function conj()
+{
+	inp();
+	a=x;
+	b=-y;
+	disp();
+}
+function mod()
+{
+	inp();
+	a=Math.sqrt(x*x+y*y);
+	b=0.0;
+	disp();
+}
+function arg()
+{
+	inp();
+	if(x==0.0)
+	{
+		if(y==0.0)
+			a=0;
+		else
+			a=Math.PI/2;
+	}
+	else
+	{
+		var t=Math.atan(Math.abs(y/x));
+		if(x>0.0&&y>0.0)
+			a=t;
+		if(x<0.0&&y>0.0)
+			a=Math.PI-t;
+		if(x<0.0&&y<0.0)
+			a=t-Math.PI;
+		if(x<0.0&&y>0.0)
+			a=-t;
+	}
+	b=0.0;
+	disp();
+}
+function lg()
+{
+	inp();
+	if(x==0&&y==0)
+	{
+		errorz();
+		return;
+ 	}
+	a=Math.log(Math.sqrt(x*x+y*y));
+	if(x==0.0)
+	{
+		if(y==0.0)
+			b=0;
+		else
+			b=Math.PI/2;
+	}
+	else
+	{
+		var t=Math.atan(Math.abs(y/x));
+		if(x>0.0&&y>0.0)
+			b=t;
+		if(x<0.0&&y>0.0)
+			b=Math.PI-t;
+		if(x<0.0&&y<0.0)
+			b=t-Math.PI;
+		if(x<0.0&&y>0.0)
+			b=-t;
+	}
+	disp();
+}
+function e()
+{
+	inp();
+	a=Math.exp(x)*Math.cos(y);
+	b=Math.exp(x)*Math.sin(y);
+	disp();
+}
+function sinz()
+{
+	inp();
+	a=(Math.exp(y)+Math.exp(-y))*Math.sin(x)/2;
+	b=(Math.exp(y)-Math.exp(-y))*Math.cos(x)/2;
+	if(a<1e-15)
+		a=0;
+	if(b<1e-15)
+		b=0;
+	disp();
+}
+function cosz()
+{
+	inp();
+	a=(Math.exp(y)+Math.exp(-y))*Math.cos(x)/2;
+	b=(Math.exp(-y)-Math.exp(y))*Math.sin(x)/2;
+	if(a<1e-15)
+		a=0;
+	if(b<1e-15)
+		b=0;
+	disp();
+}
+function sinhz()
+{
+	inp();
+	a=(Math.exp(x)-Math.exp(-x))*Math.cos(y)/2;
+	b=(Math.exp(x)+Math.exp(-x))*Math.sin(y)/2;
+	if(a<1e-15)
+		a=0;
+	if(b<1e-15)
+		b=0;
+	if(a>1e15)
+	{
+		errorz();
+		return;
+	}
+	if(b>1e15)
+	{
+		errorz();
+		return;
+	}
+	disp();
+}
+function coshz()
+{
+	inp();
+	a=(Math.exp(x)+Math.exp(-x))*Math.cos(y)/2;
+	b=(Math.exp(x)-Math.exp(-x))*Math.sin(y)/2;
+	if(a<1e-15)
+		a=0;
+	if(b<1e-15)
+		b=0;
+	if(a>1e15)
+	{
+		errorz();
+		return;
+	}
+	if(b>1e15)
+	{
+		errorz();
+		return;
+	}
+	disp();
+}
+function errorz()
+{
+	 document.getElementById("a").innerHTML="Operation failed!";
+}
+</script>
+</body>
+</html>
