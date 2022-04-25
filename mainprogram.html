@@ -1,0 +1,167 @@
+<html>
+<body id=body>
+</body>
+<script>
+var maze=new Array(),x,y,ex,ey,time,p
+window.onload=function()
+{
+    restart()
+}
+
+function start()
+{
+var c=document.getElementById("diff").value
+if(c==1)
+{
+    n=23
+    t=15
+}
+else if(c==2)
+{
+    n=47
+    t=7.5
+}
+else
+{
+    n=73
+    t=5
+}
+document.getElementById("body").innerHTML="<center><svg height=410px width=410px><g id=maze></g><g id=ptr></g></svg> <table><td><button onclick=selrestart() style='width: 65px;'>Quit বন্ধ</button></td><td style='color: white;'>____</td><td><button onmousedown=move(-1,0) style='height: 55px; width: 55px;'>LEFT বাঁ</button></td><td><button onmousedown=move(0,-1) style='height: 55px; width: 55px;'>UP উপর</button></td><td><button onmousedown=move(0,1) style='height: 55px; width: 55px;'>DOWN নীচ</button></td><td><button onmousedown=move(1,0) style='height: 55px; width: 55px;'>RIGHT ডান</button></td><td style='color: white;'>____</td><td align='center'><br><h4 id=timer>0s<br>০সেক.</h4></td></table></center>"
+for(i=0;i<=n+1;i++)
+{
+    maze[i]=new Array()
+    for(j=0;j<=n+1;j++)
+    {
+        maze[i][j]=false
+    }
+}
+for(i=0;i<=n+1;i++)
+maze[0][i]=maze[i][0]=maze[n+1][i]=maze[i][n+1]=true
+partition(1,1,n,n)
+var s=""
+for(i=0;i<=n+1;i++)
+{
+    for(j=0;j<=n+1;j++)
+        if(maze[i][j])
+        s=s+("<rect x="+(j*t)+" y="+(i*t)+" height="+t+" width="+t+" fill=black />")
+}
+document.getElementById("maze").innerHTML=s
+x=y=1
+if(randInt(2)==0)
+{
+    ex=n
+    ey=n+1
+}
+else
+{
+    ex=n+1
+    ey=n
+}
+maze[ey][ex] = false
+document.getElementById("maze").innerHTML+="<rect x="+(ex*t)+" y="+(ey*t)+" height="+t+" width="+t+" fill=red stroke=maroon />"
+drawptr()
+time=0
+p=setInterval(timer,1000)
+}
+
+function restart()
+{
+if(p!=null)
+    clearInterval(p)
+document.getElementById("body").innerHTML="<center><br><h2>Maze Game<br>গোলকধাঁধার খেলা</h2>Select Difficulty<br>স্তর বেছে নিন<br><br><select id=diff><option value=1>Easy | সহজ</option><option value=2>Medium | মধ্যম</option><option value=3>Hard | কঠিন</option></select><br><br><button onclick=start()>Start<br>শুরু</button><br><br><hr><br>&copy; Sayantan Roy</center>"
+}
+
+function selrestart()
+{
+    var f=confirm("Are you sure you want to quit?\nআপনি কী সত্যিই খেলা বন্ধ করতে চান?")
+    if(f)
+        restart()
+}
+
+function move(dx,dy)
+{
+    if(!maze[y+dy][x+dx])
+    {
+        x+=dx
+        y+=dy
+    }
+    drawptr()
+    if(x==ex&&y==ey)
+    {
+        clearInterval(p)
+        document.getElementById("body").innerHTML=("<center><br><h2>Congratulations!<br>You have completed in "+time+" seconds...<br><br>অভিনন্দন!<br>আপনি শেষ করেছেন "+bennum(time)+" সেকেণ্ডে।</h2><br><button onclick=restart()>OK</button><br>")
+    }
+}
+
+function drawptr()
+{
+    document.getElementById("ptr").innerHTML=("<rect x="+(x*t)+" y="+(y*t)+" height="+t+" width="+t+" fill=#00ff00 stroke=blue />")
+}
+
+function timer()
+{
+    time++
+    document.getElementById("timer").innerHTML=(""+time+"s<br>"+bennum(time)+"সেক.")
+}
+
+function partition(x1,y1,x2,y2)
+    {
+        var p=0,q=0,i=0,k=0
+        if(x2-x1<2||y2-y1<2)
+            return;
+        if(randInt(2)==0)
+        {
+            do{
+                p = randInt(x2-x1)
+            }while(p%2==0)
+            for(i=y1;i<=y2;i++)
+                maze[x1+p][i]=true
+            k = Math.floor(Math.sqrt(Math.sqrt(y2-y1)))
+            for(i=0;i<k;i++)
+            {
+                do{
+                    q = randInt(y2-y1)
+                }while(q%2==1)
+                maze[x1+p][y1+q]=false
+            }
+            partition(x1,y1,x1+p-1,y2)
+            partition(x1+p+1,y1,x2,y2)
+        }
+        else
+        {
+            do{
+                p = randInt(y2-y1)
+            }while(p%2==0)
+            for(i=x1;i<=x2;i++)
+                maze[i][y1+p]=true
+            k = Math.floor(Math.sqrt(Math.sqrt(x2-x1)))
+            for(i=0;i<k;i++)
+            {    
+                do{
+                    q = randInt(x2-x1)
+                }while(q%2==1)
+                maze[x1+q][y1+p]=false
+            }
+            partition(x1,y1,x2,y1+p-1)
+            partition(x1,y1+p+1,x2,y2)
+        }
+    }
+
+function randInt(num)
+{
+    return Math.floor(Math.random()*num)
+}
+
+function bennum(num)
+{
+    var ns="",r
+    while(num>0)
+    {
+        r=num%10
+        ns=String.fromCharCode(0x09E6+r)+ns
+        num=Math.floor(num/10)
+    }
+    return ns
+}
+</script>
+</html>
