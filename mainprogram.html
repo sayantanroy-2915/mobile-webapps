@@ -1,0 +1,107 @@
+<html>
+<body>
+<center>
+<br>
+Q = <input id=Q placeholder="Set of states " onchange=setopt()><br><br>
+Σ = <input id=A placeholder="Set of input symbols" onchange=setopt()><br><br>
+q<sub>0</sub> = <select id=q></select><br><br>
+F = <input id=F placeholder="Set of final state(s) (F ⊆ Q)" onchange=checkF()><br><br>
+δ : Q×Σ→Q (Transition table)<table id=tbl border=1></table>
+<br>
+<hr>
+<br>
+<input id=inp placeholder="Input String"><br><br>
+<button onclick=check()>Validate</button>
+<h5 id=val></h5>
+</center>
+<script>
+var Q = new Array()
+var A = new Array()
+var F = new Array()
+
+function setopt()
+{
+  var i,j,s,t
+  Q=document.getElementById("Q").value.trim().split(',')
+  A=document.getElementById("A").value.trim().split(',')
+  document.getElementById("q").innerHTML=""
+  for(i=0;i<Q.length;i++)
+  s+="<option value="+Q[i]+">"+Q[i]+"</option>"
+  document.getElementById("q").innerHTML=s
+  s="<option value=undefined>-</option>"+s
+  t="<th>"
+  for(i=0;i<A.length;i++)
+    t+="<td>"+A[i]+"</td>"
+  t+="</th>"
+  for(i=0;i<Q.length;i++)
+  {
+    t+="<tr><td>"+Q[i]+"</td>"
+	for(j=0;j<A.length;j++)
+      t+="<td><select id="+Q[i]+A[j]+">"+s+"</select></td>"
+    t+="</tr>"
+  }
+  document.getElementById("tbl").innerHTML=t
+}
+
+function checkF()
+{
+  F=document.getElementById("F").value.trim().split(',')
+  var i,j,f
+  for(i=0;i<F.length;i++)
+  {
+    f=false
+	for(j=0;j<Q.length;j++)
+    if(F[i]==Q[j])
+    {
+	  f=true
+      break
+	}
+  }
+  if(!f)
+  {
+    document.getElementById("F").value=""
+    F={}
+  }
+}
+
+function check()
+{
+  var i, v=false
+  var q=document.getElementById("q").value
+  if(Q.length==0||A.length==0)
+  {
+    document.getElementById("val").innerHTML="Q or Σ can\'t be Ø"
+    return
+  }
+  var w=document.getElementById("inp").value
+  var c,s=""
+  for(i=0;i<w.length;i++)
+  {
+    c=w.charAt(i)
+    s=s+"δ("+q+","+c+") = "
+    if(document.getElementById(q+c)!=null)
+      q=document.getElementById(q+c).value
+    else
+      q="undefined"
+    s=s+q+"<br>"
+    if(q=="undefined")
+    {
+      document.getElementById("val").innerHTML="Undefined DFA"
+	  return
+	}
+  }
+  for(i=0;i<F.length;i++)
+  if(q==F[i])
+  {
+    v=true
+    break
+  }
+  if(v)
+    s+="<br>Valid"
+  else
+    s+="<br>Invalid"
+  document.getElementById("val").innerHTML=s
+}
+</script>
+</body>
+</html>
